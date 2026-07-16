@@ -1,0 +1,23 @@
+[project]
+name = "mal-analyse"
+version = "0.1.0"
+description = "A database analysis project for myanimelist."
+readme = "README.md"
+requires-python = ">=3.12, <3.14"
+dependencies = [
+    "altair>=6.2.2",
+    "fg-data-profiling>=4.19.1",
+    "marimo>=0.23.14",
+    "numpy==2.3.5",
+    "pandas>=2.3.3",
+    "pip>=26.1.2",
+    "polars>=1.42.1",
+    "scipy>=1.16.0",
+]
+
+[dependency-groups]
+dev = [
+    "nbformat>=5.10.4",
+    "pyrefly>=1.1.1",
+    "ruff>=0.15.22",
+]
