@@ -9,3 +9,9 @@ wheels/
 # Virtual environments
 .venv
 .env
+
+# Notebook cache file
+py/__marimo__
+
+# IDE settings
+.vscode
