@@ -7,18 +7,18 @@ requires-python = ">=3.12"
 dependencies = [
     "marimo>=0.23.14",
     "matplotlib>=3.11.1",
-    "numpy==2.5.2",
+    "numpy==2.5.3",
     "pandas>=2.3.3",
     "polars>=1.42.1",
     "pyarrow>=25.0.1",
     "scipy>=1.16.0",
     "seaborn>=0.13.2",
+    "tomli-w>=1.2.0",
 ]
 
 [dependency-groups]
 dev = [
     "nbformat>=5.10.4",
-    "pyrefly>=1.1.1",
     "ruff>=0.15.22",
     "ty>=0.0.73",
 ]
