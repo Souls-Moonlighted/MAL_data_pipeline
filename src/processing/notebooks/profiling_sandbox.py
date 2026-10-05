@@ -7,6 +7,7 @@ with app.setup:
     import math
     from pathlib import Path
 
+    import altair as alt
     import marimo as mo
     import matplotlib.pyplot as plt
     import polars as pl
@@ -16,7 +17,7 @@ with app.setup:
 
 @app.cell
 def _():
-    dir = Path("../dataset/anime_entries.csv")
+    dir = Path("./dataset/anime_entries.csv")
     if dir.exists():
         pass
     else:
@@ -107,7 +108,7 @@ def _(raw_df):
             {
                 "column": col_list,
                 "data_type": [
-                    type for type in [raw_df.schema[col] for col in col_list]
+                    str(type) for type in [raw_df.schema[col] for col in col_list]
                 ],
             }
         )
@@ -130,6 +131,62 @@ def _(col_types, raw_df):
     plt.tight_layout()
     plt.text(0.5, -1.25, f"Total columns: {len(raw_df.columns)}")
     plt.show()
+    return
+
+
+@app.cell
+def _(col_types, raw_df):
+    total_cols = raw_df.width
+    _pie = (
+        alt.Chart(col_types)
+        .mark_arc(outerRadius=120)
+        .encode(
+            theta=alt.Theta(field="count", type="quantitative", stack=True),
+            color=alt.Color(
+                field="data_type",
+                type="nominal",
+                title="Data Type",
+                legend=alt.Legend(orient="right"),
+            ),
+            tooltip=[
+                alt.Tooltip("data_type:N", title="Data Type"),
+                alt.Tooltip("count:Q", title="Count"),
+                alt.Tooltip("percent:Q", title="Percentage", format=".2%"),
+            ],
+        )
+        .transform_joinaggregate(total="sum(count)")
+        .transform_calculate(percent="datum.count / datum.total")
+    )
+
+    # 2. Hiển thị nhãn % trực tiếp trên từng lát (tương đương autopct='%1.2f%%')
+    _text = _pie.mark_text(radius=80).encode(
+        text=alt.Text("percent:Q", format=".2%"),
+        color=alt.value("white"),  # Đổi thành "black" nếu màu nền sáng
+    )
+
+    # 3. Kết hợp lát + nhãn chữ và thiết lập tiêu đề, phụ đề
+    _chart = (
+        (_pie + _text)
+        .properties(
+            title=alt.TitleParams(
+                text="Percentage of data types in the dataframe",
+                subtitle=f"Total columns: {total_cols}",
+                subtitleFontSize=12,
+                subtitleColor="gray",
+                anchor="middle",
+            ),
+            width=350,
+            height=350,
+        )
+        .configure_view(strokeWidth=0)
+    )
+    _chart.show()
+    return
+
+
+@app.cell
+def _():
+    alt.Ma
     return
 
 
