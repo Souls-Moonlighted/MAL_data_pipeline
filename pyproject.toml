@@ -1,24 +1,24 @@
 [project]
-name = "mal-analyse"
-version = "0.1.0"
-description = "A database analysis project for myanimelist."
+name = "data_processing_pipeline"
+version = "0.2"
+description = "A data processing pipeline written in polars."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "altair[all]>=6.3.0",
+    "duckdb>=1.5.6",
     "marimo>=0.23.14",
-    "matplotlib>=3.11.1",
     "numpy==2.5.3",
-    "pandas>=2.3.3",
     "polars>=1.42.1",
     "pyarrow>=25.0.1",
     "scipy>=1.16.0",
-    "seaborn>=0.13.2",
+    "scrapy>=2.19.0",
     "tomli-w>=1.2.0",
 ]
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.40.1",
     "nbformat>=5.10.4",
     "ruff>=0.15.22",
-    "ty>=0.0.73",
 ]
