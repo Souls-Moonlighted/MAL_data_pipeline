@@ -16,8 +16,8 @@ py/__marimo__
 # IDE settings
 .vscode
 
-#Logs
-/logs
+# Logs
+logs
 
-#dataset
-/dataset
+# Dataset
+data
