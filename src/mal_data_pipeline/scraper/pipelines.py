@@ -1,6 +1,7 @@
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from itemadapter import ItemAdapter
+from scrapy import Spider
 
 
 class AnimePipeline:
@@ -11,19 +12,23 @@ class AnimePipeline:
     converted when possible; values that cannot be parsed are left unchanged.
     """
 
-    INTEGER_FIELDS: ClassVar[frozenset[str]] = frozenset({
-        "episodes",
-        "ranked",
-        "popularity",
-        "members",
-        "favorites",
-    })
+    INTEGER_FIELDS: ClassVar[frozenset[str]] = frozenset(
+        {
+            "episodes",
+            "ranked",
+            "popularity",
+            "members",
+            "favorites",
+        }
+    )
 
-    FLOAT_FIELDS: ClassVar[frozenset[str]] = frozenset({
-        "score",
-    })
+    FLOAT_FIELDS: ClassVar[frozenset[str]] = frozenset(
+        {
+            "score",
+        }
+    )
 
-    def process_item(self, item, spider):
+    def process_item(self, item: Any, spider: Spider) -> Any:
         """Normalize an item before passing it to the next pipeline stage.
 
         Args:
@@ -42,7 +47,7 @@ class AnimePipeline:
         return item
 
     @staticmethod
-    def _normalize_strings(adapter):
+    def _normalize_strings(adapter: ItemAdapter) -> None:
         """Strip whitespace from string values in the item adapter.
 
         Empty strings are replaced with ``None``.
@@ -55,7 +60,7 @@ class AnimePipeline:
                 value = value.strip()
                 adapter[field_name] = value or None
 
-    def _convert_integers(self, adapter):
+    def _convert_integers(self, adapter: ItemAdapter) -> None:
         """Convert configured integer fields when their values are parseable.
 
         Commas and leading number signs are removed before conversion. Values
@@ -77,7 +82,7 @@ class AnimePipeline:
                 # Keep the original value if it cannot be parsed safely.
                 pass
 
-    def _convert_floats(self, adapter):
+    def _convert_floats(self, adapter: ItemAdapter) -> None:
         """Convert configured float fields when their values are parseable.
 
         Values that cannot be converted are left unchanged.

@@ -1,6 +1,7 @@
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import scrapy
+from scrapy.http import Response
 
 from mal_data_pipeline.scraper.items import AnimeInfoItem
 
@@ -44,7 +45,12 @@ class AnimeInfoSpider(scrapy.Spider):
         "favorites": "Favorites",
     }
 
-    def __init__(self, max_items: str | int | None = None, *args, **kwargs):
+    def __init__(
+        self,
+        max_items: str | int | None = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         """Initialize the spider and configure its optional item limit.
 
         Args:
@@ -79,7 +85,7 @@ class AnimeInfoSpider(scrapy.Spider):
         self.scheduled_anime = 0
         self.scraped_items = 0
 
-    def parse(self, response):
+    def parse(self, response: Response):
         """Schedule anime detail pages and continue through listing pages.
 
         Args:
@@ -123,7 +129,7 @@ class AnimeInfoSpider(scrapy.Spider):
                     callback=self.parse,
                 )
 
-    def parse_anime(self, response):
+    def parse_anime(self, response: Response):
         """Extract an anime's title and mapped sidebar metadata.
 
         Args:
@@ -159,7 +165,7 @@ class AnimeInfoSpider(scrapy.Spider):
         yield item
 
     @staticmethod
-    def _parse_sidebar(response):
+    def _parse_sidebar(response: Response) -> dict[str, str]:
         """Extract labeled metadata values from an anime page's sidebar.
 
         Args:
