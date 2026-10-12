@@ -20,7 +20,3 @@ AUTOTHROTTLE_START_DELAY = 1.5
 AUTOTHROTTLE_MAX_DELAY = 10
 
 FEED_EXPORT_ENCODING = "utf-8"
-
-ITEM_PIPELINES = {
-    "mal_data_pipeline.scraper.pipelines.AnimePipeline": 300,
-}
