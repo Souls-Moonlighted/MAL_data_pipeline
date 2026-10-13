@@ -21,7 +21,7 @@ def crawl_cli(
         typer.Option("-n", "--count", help="Maximum number of items to scrape."),
     ] = None,
     format: Annotated[
-        Literal["csv", "json", "jsonl", "xml"],
+        Literal["csv", "json", "jsonl"],
         typer.Option("-f", "--format", help="Output file format."),
     ] = "csv",
     output: Annotated[
@@ -31,12 +31,20 @@ def crawl_cli(
     log_dir: Annotated[
         Path, typer.Option("--log-dir", help="Path to the crawler log file.")
     ] = scraping.LOG_DIR,
-    order: Annotated[
+    flush: Annotated[
         bool,
         typer.Option(
-            "--order/--no-order", help="Preserve the order in which items are scraped."
+            "--flush/--no-flush",
+            help="Flush exported items periodically while crawling.",
         ),
     ] = True,
+    flush_every: Annotated[
+        int,
+        typer.Option(
+            "--flush-every",
+            help="Number of items to scrape before flushing output.",
+        ),
+    ] = 10,
 ):
     """Run a Scrapy spider and save its results using the selected crawl options."""
 
@@ -46,7 +54,8 @@ def crawl_cli(
         format=format,
         output=output,
         log_dir=log_dir,
-        order=order,
+        flush=flush,
+        flush_every=flush_every,
     )
 
 
