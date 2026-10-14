@@ -156,10 +156,11 @@ class AnimeInfoSpider(scrapy.Spider):
         item = AnimeInfoItem(
             title=title,
             url=response.url,
+            **{
+                field_name: raw_info.get(source_key)
+                for field_name, source_key in self.FIELD_MAP.items()
+            },
         )
-
-        for field_name, source_key in self.FIELD_MAP.items():
-            item[field_name] = raw_info.get(source_key)
 
         self.scraped_items += 1
         yield item

@@ -1,7 +1,8 @@
-import scrapy
+from dataclasses import dataclass
 
 
-class AnimeInfoItem(scrapy.Item):
+@dataclass(slots=True)
+class AnimeInfoItem:
     """Scrapy item containing metadata for an anime entry.
 
     Attributes:
@@ -31,34 +32,34 @@ class AnimeInfoItem(scrapy.Item):
         favorites: Number of MyAnimeList members who favorited the anime.
     """
 
-    title = scrapy.Field()
-    url = scrapy.Field()
+    title: str
+    url: str
 
-    japanese_title = scrapy.Field()
-    english_title = scrapy.Field()
-    synonyms = scrapy.Field()
+    japanese_title: str | None = None
+    english_title: str | None = None
+    synonyms: str | None = None
 
-    type = scrapy.Field()
-    episodes = scrapy.Field()
-    status = scrapy.Field()
+    type: str | None = None
+    episodes: str | None = None
+    status: str | None = None
 
-    aired = scrapy.Field()
-    premiered = scrapy.Field()
-    broadcast = scrapy.Field()
+    aired: str | None = None
+    premiered: str | None = None
+    broadcast: str | None = None
 
-    producers = scrapy.Field()
-    licensors = scrapy.Field()
-    studios = scrapy.Field()
+    producers: str | None = None
+    licensors: str | None = None
+    studios: str | None = None
 
-    source = scrapy.Field()
-    genres = scrapy.Field()
-    themes = scrapy.Field()
+    source: str | None = None
+    genres: str | None = None
+    themes: str | None = None
 
-    duration = scrapy.Field()
-    rating = scrapy.Field()
+    duration: str | None = None
+    rating: str | None = None
 
-    score = scrapy.Field()
-    ranked = scrapy.Field()
-    popularity = scrapy.Field()
-    members = scrapy.Field()
-    favorites = scrapy.Field()
+    score: str | None = None
+    ranked: str | None = None
+    popularity: str | None = None
+    members: str | None = None
+    favorites: str | None = None
