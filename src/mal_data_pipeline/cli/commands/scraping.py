@@ -1,6 +1,5 @@
 """Helpers for invoking Scrapy commands from the project CLI."""
 
-import shlex
 import subprocess
 import sys
 from datetime import datetime
@@ -13,16 +12,21 @@ ROOT: Path = Path(__file__).resolve().parents[4]
 
 CURRENT_DATETIME: str = datetime.now(tzlocal.get_localzone()).strftime("%m-%d-%y_%H_%M")
 
-OUTPUT_DIR: Path = ROOT / "data" / "raw" / f"[{CURRENT_DATETIME}]_anime_info"
+OUTPUT_DIR: Path = ROOT / "data" / "raw" / f"[{CURRENT_DATETIME}]_data"
 LOG_DIR: Path = ROOT / "logs" / "scraper" / f"[{CURRENT_DATETIME}]_crawl.log"
+CACHE_DIR: Path = ROOT / "scraper_cache" / f"[{CURRENT_DATETIME}]_cache"
 
 
 def show_spider_list() -> None:
     """Print the spiders registered with the configured Scrapy project."""
-    command = "scrapy list"
+
+    command = ["scrapy", "list"]
+
+    command = ["scrapy", "list"]
+
     try:
         run = subprocess.run(
-            shlex.split(command),
+            command,
             capture_output=True,
             text=True,
             check=True,
@@ -37,12 +41,15 @@ def show_spider_list() -> None:
 
 def crawl(
     spider: str,
+    resume: Path | None = None,
     n: int | None = None,
     format: Literal["csv", "json", "jsonl"] = "csv",
     output: Path = OUTPUT_DIR,
     log_dir: Path = LOG_DIR,
     flush: bool = True,
-    flush_every: int = 10,
+    flush_every: int = 100,
+    cache: bool = True,
+    cache_dir: Path = CACHE_DIR,
 ) -> None:
     """Run a spider and write its scraped items to the selected output.
 
@@ -61,6 +68,7 @@ def crawl(
 
     output.parent.mkdir(parents=True, exist_ok=True)
     log_dir.parent.mkdir(parents=True, exist_ok=True)
+    cache_dir.mkdir(parents=True, exist_ok=True)
 
     command = [
         "scrapy",
@@ -76,6 +84,7 @@ def crawl(
 
     if n is not None:
         command.extend(["-a", f"max_items={n}"])
+
     if flush:
         command.remove("-O")
         command.remove(f"{output}.{format}")
@@ -89,6 +98,19 @@ def crawl(
                 f"EXPORT_FLUSH_EVERY={flush_every}",
             ]
         )
+
+    if resume:
+        command.extend(["-s", f"JOBDIR={resume}"])
+
+    if cache and resume is not None:
+        command.extend(["-s", f"JOBDIR={cache_dir}"])
+
+    if resume:
+        command.extend(["-s", f"JOBDIR={resume}"])
+
+    if cache and (resume is not None):
+        command.extend(["-s", f"JOBDIR={cache_dir}"])
+
     try:
         subprocess.run(command, text=True, check=True)
     except subprocess.CalledProcessError as err:

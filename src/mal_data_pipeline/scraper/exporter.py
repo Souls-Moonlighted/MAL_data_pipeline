@@ -21,17 +21,17 @@ def create_exporter(
     file: BinaryIO,
     output_path: Path,
 ) -> BaseItemExporter:
-    """Tạo exporter dựa trên phần mở rộng của file đầu ra.
+    """Create an exporter based on the output file extension.
 
     Args:
-        file: File nhị phân đã được mở để ghi dữ liệu.
-        output_path: Đường dẫn file đầu ra, dùng để xác định định dạng.
+        file: Binary file opened for writing data.
+        output_path: Output file path used to determine the format.
 
     Returns:
-        Exporter tương ứng với định dạng file.
+        The exporter corresponding to the file format.
 
     Raises:
-        ValueError: Nếu định dạng file không được hỗ trợ.
+        ValueError: If the file format is not supported.
     """
     suffix = output_path.suffix.lower()
     exporter_class = EXPORTER_BY_SUFFIX.get(suffix)

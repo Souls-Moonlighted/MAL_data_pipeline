@@ -21,3 +21,8 @@ logs
 
 # Dataset
 data
+
+# Cache, temp files
+.ruff_cache
+temp
+scraper_cache
